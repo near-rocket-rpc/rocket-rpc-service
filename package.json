@@ -1,0 +1,19 @@
+{
+  "name": "rocket-rpc-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Wang",
+  "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^3.4.1",
+    "config": "^3.3.8",
+    "debug": "^4.3.4",
+    "koa": "^2.13.4",
+    "koa-better-http-proxy": "^0.2.10",
+    "near-api-js": "^1.0.0"
+  }
+}
