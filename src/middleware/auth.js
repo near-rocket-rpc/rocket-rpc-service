@@ -2,6 +2,7 @@ const { getNEAR } = require("../utils/near");
 const { parse, verify } = require("../utils/token");
 const debug = require('debug')('auth');
 const assert = require('assert');
+const { charge } = require("../service/balance_service");
 
 // token cache
 const tokens = {};
@@ -12,6 +13,7 @@ const tokens = {};
  * @param {*} next 
  */
 async function authMiddleware (ctx, next) {
+  let plan = 'free';
   const authHeader = ctx.header.authorization;
   let authToken = null;
   if (authHeader && authHeader.startsWith('bearer')) {
@@ -38,10 +40,15 @@ async function authMiddleware (ctx, next) {
     await verify(authToken, pubkey);
     debug(`${sub} authorized`);
 
-    ctx.plan = 'premium';
-  } else {
-    ctx.plan = 'free';
+    // try to charge for usage
+    try {
+      await charge(sub);
+
+      plan = 'premium';
+    } catch (err) {}
   }
+
+  ctx.plan = plan;
 
   await next();
 }
