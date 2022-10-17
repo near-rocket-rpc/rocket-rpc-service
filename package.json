@@ -17,6 +17,8 @@
     "koa-better-http-proxy": "^0.2.10",
     "lodash": "^4.17.21",
     "near-api-js": "^1.0.0",
+    "near-lake-framework": "^1.0.4",
+    "node-global-proxy": "^1.0.1",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "pino": "^8.6.1",

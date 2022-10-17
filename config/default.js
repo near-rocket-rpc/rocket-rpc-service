@@ -19,5 +19,8 @@ module.exports = {
     nodeUrl: 'https://public-rpc.blockpi.io/http/near-testnet',
     managerAccountId: 'manager.escrow.rocket0.testnet',
     escrowContractId: 'escrow.rocket0.testnet',
+  },
+  lake: {
+    startBlockHeight: 102450040,
   }
 }
