@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const ChargeCheckpoint = require("../db/checkpoint");
+const Checkpoint = require("../db/checkpoint");
 const Transaction = require("../db/transaction");
 const _ = require('lodash');
 const logger = require('../utils/logger');
@@ -12,7 +12,7 @@ async function chargeAllUsage() {
   running = true;
 
   try {
-    const checkpoint = await ChargeCheckpoint.findOne();
+    const checkpoint = await Checkpoint.findOne();
     const lastChargedId = checkpoint ? checkpoint.last_charged_id : 0;
 
     // find all charging transactions later than checkpoint

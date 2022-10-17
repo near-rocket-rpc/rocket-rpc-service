@@ -14,8 +14,6 @@ const lakeConfig = {
  * @param {import("near-lake-framework/dist/types").StreamerMessage} message 
  */
 async function handleStreamerMessage(message) {
-  logger.debug(`consuming block ${message.block.header.height}`);
-
   const depositEvents = message
     .shards
     .flatMap(shard => shard.receiptExecutionOutcomes)
@@ -33,8 +31,8 @@ async function handleStreamerMessage(message) {
     .filter(e => e.standard === 'rocket-rpc' && e.event === 'deposit');
 
   if (depositEvents.length) {
-    console.log('found deposit events');
-    console.dir(depositEvents);
+    logger.debug('found deposit events');
+    logger.debug('%j', depositEvents);
   }
 
   for (const event of depositEvents) {

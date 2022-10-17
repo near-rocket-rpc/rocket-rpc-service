@@ -1,20 +1,31 @@
 const { Model, DataTypes } = require("sequelize");
 const { sequelize } = require('./sequelize');
 
-class ChargeCheckpoint extends Model {
+class Checkpoint extends Model {
+  static async getCheckpoint (name) {
+    const checkpoint = await Checkpoint.findOne({
+      where: {
+        name
+      }
+    });
+  }
 }
 
-ChargeCheckpoint.init({
-  last_charged_id: {
+Checkpoint.init({
+  name: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  checkpoint: {
     type: DataTypes.INTEGER,
     allowNull: false,
   }
 }, {
   sequelize ,
-  tableName: 'charge_checkpoint',
+  tableName: 'checkpoint',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at'
 });
 
-module.exports = ChargeCheckpoint;
+module.exports = Checkpoint;

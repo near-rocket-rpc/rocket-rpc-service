@@ -37,7 +37,7 @@ async function deposit (accountId, amount) {
         account_id: accountId,
       },
       transaction: t,
-      lock: Sequelize.LOCK.UPDATE,
+      lock: t.LOCK.UPDATE,
     });
 
     if (!balance) {

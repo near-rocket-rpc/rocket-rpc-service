@@ -15,7 +15,7 @@ function setupGlobalProxy () {
 }
 
 async function main () {
-  setupGlobalProxy();
+  // setupGlobalProxy();
 
   await connect();
   await sequelize.sync({ alter: true });
