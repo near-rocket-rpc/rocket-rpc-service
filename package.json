@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "start:debug": "npm start | npx pino-pretty"
   },
   "author": "Daniel Wang",
   "license": "MIT",
@@ -14,9 +15,14 @@
     "debug": "^4.3.4",
     "koa": "^2.13.4",
     "koa-better-http-proxy": "^0.2.10",
+    "lodash": "^4.17.21",
     "near-api-js": "^1.0.0",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
+    "pino": "^8.6.1",
     "sequelize": "^6.23.2"
+  },
+  "devDependencies": {
+    "pino-pretty": "^9.1.1"
   }
 }

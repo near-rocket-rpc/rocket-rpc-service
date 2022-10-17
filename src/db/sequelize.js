@@ -9,7 +9,6 @@ const sequelize = new Sequelize(`postgres://${pgConfig.username}:${pgConfig.pass
 
 async function connect () {
   await sequelize.authenticate()
-  console.log('DB connected.')
   return sequelize
 }
 

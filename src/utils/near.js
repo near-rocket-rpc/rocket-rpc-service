@@ -1,4 +1,6 @@
 const nearAPI = require('near-api-js');
+const config = require('config');
+const logger = require('./logger');
 
 let near;
 
@@ -17,7 +19,7 @@ async function getNEAR() {
     const connectionConfig = {
       networkId: "testnet",
       keyStore: myKeyStore, // first create a key store 
-      nodeUrl: "https://public-rpc.blockpi.io/http/near-testnet",
+      nodeUrl: config.get('near.nodeUrl'),
       walletUrl: "https://wallet.testnet.near.org",
       helperUrl: "https://helper.testnet.near.org",
       explorerUrl: "https://explorer.testnet.near.org",
@@ -30,6 +32,29 @@ async function getNEAR() {
   return near;
 }
 
+async function batchCharge (chargesMap) {
+  const near = await getNEAR();
+  const manager = await near.account(config.get('near.managerAccountId'));
+  const charges = Object
+    .keys(chargesMap)
+    .map(accountId => [
+      accountId,
+      chargesMap[accountId].toString()
+    ]);
+
+  logger.info('charging accounts:');
+  logger.info('%j', charges);
+
+  await manager.functionCall({
+    contractId: config.get('near.escrowContractId'),
+    methodName: 'batch_charge',
+    args: {
+      charges
+    },
+  });
+} 
+
 module.exports = {
-  getNEAR
+  getNEAR,
+  batchCharge,
 }

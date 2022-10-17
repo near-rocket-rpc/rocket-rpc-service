@@ -1,6 +1,6 @@
 const { getNEAR } = require("../utils/near");
 const { parse, verify } = require("../utils/token");
-const debug = require('debug')('auth');
+const logger = require('../utils/logger');
 const assert = require('assert');
 const { charge } = require("../service/balance_service");
 
@@ -21,7 +21,7 @@ async function authMiddleware (ctx, next) {
   }
 
   if (authToken) {
-    debug('authorizing jwt token');
+    logger.debug('authorizing jwt token');
     const tokenBody = parse(authToken);
     const { sub, pubkey } = tokenBody.body;
 
@@ -38,7 +38,7 @@ async function authMiddleware (ctx, next) {
 
     assert(tokens[pubkey] === sub, 'you are not the owner of this pubkey');
     await verify(authToken, pubkey);
-    debug(`${sub} authorized`);
+    logger.debug(`${sub} authorized`);
 
     // try to charge for usage
     try {
