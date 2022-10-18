@@ -2,11 +2,25 @@ const { Model, DataTypes } = require("sequelize");
 const { sequelize } = require('./sequelize');
 
 class Checkpoint extends Model {
+  /**
+   * 
+   * @param {string} name 
+   * @returns {number | null}
+   */
   static async getCheckpoint (name) {
     const checkpoint = await Checkpoint.findOne({
       where: {
         name
       }
+    });
+
+    return checkpoint ? checkpoint.checkpoint : null;
+  }
+
+  static async saveCheckpoint (name, cp) {
+    await Checkpoint.upsert({
+      name,
+      checkpoint: cp
     });
   }
 }
@@ -14,10 +28,10 @@ class Checkpoint extends Model {
 Checkpoint.init({
   name: {
     type: DataTypes.STRING,
-    unique: true,
+    primaryKey: true,
   },
   checkpoint: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     allowNull: false,
   }
 }, {

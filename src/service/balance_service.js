@@ -49,7 +49,7 @@ async function deposit (accountId, amount) {
       });
     }
 
-    balance.balance += amount;
+    balance.balance = BigInt(balance.balance) + BigInt(amount);
     await balance.save({ transaction: t });
 
     await Transaction.create({
