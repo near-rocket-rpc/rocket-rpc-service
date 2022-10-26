@@ -39,6 +39,7 @@ async function authMiddleware (ctx, next) {
     assert(tokens[pubkey] === sub, 'you are not the owner of this pubkey');
     await verify(authToken, pubkey);
     logger.debug(`${sub} authorized`);
+    ctx.accountId = sub;
 
     // try to charge for usage
     try {
@@ -47,7 +48,7 @@ async function authMiddleware (ctx, next) {
       plan = 'premium';
     } catch (err) {
       logger.warn('charging %s failed', sub);
-      logger.warn(err);
+      // logger.debug(err);
     }
   }
 
