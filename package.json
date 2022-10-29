@@ -16,6 +16,7 @@
     "koa": "^2.13.4",
     "koa-better-http-proxy": "^0.2.10",
     "koa-body": "^5.0.0",
+    "limiter": "^2.1.0",
     "lodash": "^4.17.21",
     "near-api-js": "^1.0.0",
     "near-lake-framework": "^1.0.4",
