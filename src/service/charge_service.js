@@ -25,6 +25,7 @@ async function chargeAllUsage() {
         }
       }
     });
+    if (transactions.length === 0) return;
 
     const newCheckpointId = _.max(transactions.map(t => t.id));
     logger.debug('newCheckpointId %d', newCheckpointId);

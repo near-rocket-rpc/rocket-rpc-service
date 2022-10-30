@@ -39,7 +39,7 @@ async function main () {
     logger.info(`Rocket RPC server listening at ${config.port} ...`);
   });
 
-  // setInterval(chargeAllUsage, config.get('chargeInterval'));
+  setInterval(chargeAllUsage, config.get('chargeInterval'));
 }
 
 main()

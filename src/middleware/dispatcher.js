@@ -22,10 +22,8 @@ const premiumRPC = buildRPC(config.rpc.premium);
 
 async function dispatchMiddleware (ctx, next) {
   if (ctx.plan === 'premium') {
-    console.log('using premium rpc');
     return await premiumRPC(ctx, next);
   } else {
-    console.log('using free rpc');
     return await freeRPC(ctx, next);
   }
 }

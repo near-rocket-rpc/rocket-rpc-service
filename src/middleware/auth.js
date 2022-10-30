@@ -47,7 +47,7 @@ async function authMiddleware (ctx, next) {
 
       plan = 'premium';
     } catch (err) {
-      logger.warn('charging %s failed', sub);
+      logger.debug('charging %s failed', sub);
       // logger.debug(err);
     }
   }
