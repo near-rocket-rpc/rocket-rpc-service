@@ -17,7 +17,7 @@ async function authMiddleware (ctx, next) {
   const authHeader = ctx.header.authorization;
   let authToken = null;
   if (authHeader && authHeader.startsWith('bearer')) {
-    authToken = 'ewogICJhbGciOiAiRUQyNTUxOSIsCiAgInR5cCI6ICJKV1QiCn0=.ewogICJzdWIiOiAiMC5jb3JuZGV2LnRlc3RuZXQiLAogICJwdWJrZXkiOiAiZWQyNTUxOTp4MWNNb28zOUVuV2lCUTdtcDNEMmRlb2pSbW9XekExN3lYdnZuNXVxelEzIgp9.InP5xNex8kqeZGWhVFirPCH0W4LjSj2UHqeZYCfyOggCuxmjvzZQQWJnODDxG2Il8exHWD/RpHNbVcwW6UvVCw==';
+    authToken = authHeader.split(" ")[1];
   }
 
   if (authToken) {
@@ -39,13 +39,17 @@ async function authMiddleware (ctx, next) {
     assert(tokens[pubkey] === sub, 'you are not the owner of this pubkey');
     await verify(authToken, pubkey);
     logger.debug(`${sub} authorized`);
+    ctx.accountId = sub;
 
     // try to charge for usage
     try {
       await charge(sub);
 
       plan = 'premium';
-    } catch (err) {}
+    } catch (err) {
+      logger.debug('charging %s failed', sub);
+      // logger.debug(err);
+    }
   }
 
   ctx.plan = plan;

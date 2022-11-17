@@ -4,6 +4,9 @@ const { startConsumer } = require('./src/lake/event_consumer');
 const app = require('./src/server');
 const chargeAllUsage = require('./src/service/charge_service');
 const logger = require('./src/utils/logger');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const { setupSocket } = require('./src/middleware/socketio');
 
 function setupGlobalProxy () {
   const proxy = require('node-global-proxy').default;
@@ -15,7 +18,7 @@ function setupGlobalProxy () {
 }
 
 async function main () {
-  setupGlobalProxy();
+  // setupGlobalProxy();
 
   await connect();
   await sequelize.sync({ alter: true });
@@ -23,11 +26,20 @@ async function main () {
 
   startConsumer();
 
-  app.listen(config.port, () => {
+  const httpServer = createServer(app.callback());
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "http://127.0.0.1:5173",
+      methods: ["GET", "POST"]
+    }
+  });
+  setupSocket(io);
+
+  httpServer.listen(config.port, () => {
     logger.info(`Rocket RPC server listening at ${config.port} ...`);
   });
 
-  // setInterval(chargeAllUsage, config.get('chargeInterval'));
+  setInterval(chargeAllUsage, config.get('chargeInterval'));
 }
 
 main()

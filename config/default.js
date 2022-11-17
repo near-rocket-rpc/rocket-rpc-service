@@ -21,6 +21,6 @@ module.exports = {
     escrowContractId: 'escrow.rocket0.testnet',
   },
   lake: {
-    startBlockHeight: 102450040,
+    startBlockHeight: 102454000,
   }
 }

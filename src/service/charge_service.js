@@ -1,10 +1,11 @@
 const { Op } = require("sequelize");
-const ChargeCheckpoint = require("../db/checkpoint");
+const Checkpoint = require("../db/checkpoint");
 const Transaction = require("../db/transaction");
 const _ = require('lodash');
 const logger = require('../utils/logger');
 const { batchCharge } = require("../utils/near");
 
+const CHARGE_TASK = 'charge_service';
 let running = false;
 
 async function chargeAllUsage() {
@@ -12,8 +13,8 @@ async function chargeAllUsage() {
   running = true;
 
   try {
-    const checkpoint = await ChargeCheckpoint.findOne();
-    const lastChargedId = checkpoint ? checkpoint.last_charged_id : 0;
+    const checkpoint = await Checkpoint.getCheckpoint(CHARGE_TASK);
+    const lastChargedId = checkpoint || 0;
 
     // find all charging transactions later than checkpoint
     const transactions = await Transaction.findAll({
@@ -24,6 +25,7 @@ async function chargeAllUsage() {
         }
       }
     });
+    if (transactions.length === 0) return;
 
     const newCheckpointId = _.max(transactions.map(t => t.id));
     logger.debug('newCheckpointId %d', newCheckpointId);
@@ -36,6 +38,8 @@ async function chargeAllUsage() {
     logger.debug('accountCharges %j', accountCharges);
 
     await batchCharge(accountCharges);
+
+    await Checkpoint.saveCheckpoint(CHARGE_TASK, newCheckpointId);
   } catch (err) {
     logger.error('chargeAll failed');
     logger.error(err);
